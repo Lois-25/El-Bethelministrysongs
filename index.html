@@ -125,6 +125,45 @@
     .btn-outline-gold { background: transparent; border: 1.5px solid var(--gold-primary); color: var(--gold-primary); }
     .btn-dark { background: var(--bg-dark); color: #fff; }
 
+    /* BUTTON CONTAINER WITH HAND INSIDE */
+    .btn-hand-wrapper {
+      margin-top: 1rem;
+      width: 100%;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .btn-hand-wrapper .btn {
+      width: 100%;
+      justify-content: center;
+      padding-top: 0.6rem;
+      padding-bottom: 0.6rem;
+      flex-direction: column;
+      gap: 0.1rem;
+    }
+
+    /* POINTING HAND DIRECTLY INSIDE BUTTON UNDER TEXT */
+    .pointing-hand-container {
+      display: none;
+      line-height: 1;
+      margin-top: 2px;
+    }
+    .pointing-hand-container.active {
+      display: block;
+    }
+    .pointing-hand-icon {
+      font-size: 1.2rem;
+      color: #000000;
+      display: inline-block;
+      animation: bouncePointUp 0.3s infinite alternate ease-in-out;
+    }
+
+    @keyframes bouncePointUp {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-4px); }
+    }
+
     /* PAGE ROUTING CONTROL */
     .page-view { display: none; }
     .page-view.active { display: block; }
@@ -201,38 +240,92 @@
       opacity: 1;
     }
 
-    /* SONGS LIST & AUDIO PLAYERS WITH DIRECT DOWNLOAD BUTTON */
+    /* SONGS LIST & AUDIO PLAYERS */
     .songs-section { padding: 4rem 0; text-align: center; }
     .section-title { font-size: 0.85rem; letter-spacing: 2px; color: var(--gold-primary); margin-bottom: 2rem; }
     .songs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
-    .song-card { background: white; border-radius: var(--radius-sm); padding: 1.25rem; text-align: left; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-    
-    .player-download-row {
+    .song-card { 
+      background: white; 
+      border-radius: var(--radius-sm); 
+      padding: 1.5rem; 
+      text-align: left; 
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05); 
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+    }
+
+    /* CUSTOM 35S AUDIO PLAYER STYLING */
+    .custom-player-wrapper {
+      background: var(--bg-dark);
+      padding: 1rem;
+      border-radius: 12px;
+      margin-top: 1rem;
+      color: white;
+      position: relative;
+    }
+    .player-controls-row {
       display: flex;
       align-items: center;
-      gap: 0.75rem;
-      margin-top: 0.75rem;
+      gap: 0.8rem;
     }
-    .audio-player { flex: 1; min-width: 0; }
-    .btn-download {
-      display: inline-flex;
+    .play-btn-custom {
+      background: var(--gold-gradient);
+      border: none;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: flex;
       align-items: center;
       justify-content: center;
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      background: var(--gold-gradient);
+      cursor: pointer;
       color: #000;
-      font-size: 1.1rem;
+      font-size: 0.9rem;
       flex-shrink: 0;
-      transition: all 0.2s ease;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.15);
-      border: none;
+    }
+    .progress-bar-container {
+      flex: 1;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 10px;
+      overflow: hidden;
       cursor: pointer;
     }
-    .btn-download:hover {
-      transform: scale(1.08);
-      opacity: 0.95;
+    .progress-bar-fill {
+      width: 0%;
+      height: 100%;
+      background: #ffffff;
+      border-radius: 10px;
+      transition: width 0.1s linear;
+    }
+    .time-display {
+      font-size: 0.75rem;
+      font-family: monospace;
+      color: var(--gold-primary);
+      flex-shrink: 0;
+    }
+
+    /* END OF PREVIEW LOCK OVERLAY */
+    .preview-locked-overlay {
+      display: none;
+      background: rgba(7, 25, 19, 0.95);
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: 12px;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      color: var(--gold-primary);
+      font-weight: 700;
+      font-size: 0.9rem;
+      z-index: 5;
+    }
+    .preview-locked-overlay.active {
+      display: flex;
     }
 
     /* EVENT & BANNER */
@@ -247,6 +340,91 @@
       margin: 3rem 0;
     }
     .event-card { background: white; padding: 2rem; border-radius: var(--radius-md); margin-bottom: 4rem; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+
+    /* STREAMING MODAL */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.75);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      backdrop-filter: blur(4px);
+    }
+    .modal-overlay.active {
+      display: flex;
+    }
+    .modal-card {
+      background: white;
+      border-radius: var(--radius-md);
+      width: 90%;
+      max-width: 450px;
+      padding: 2rem;
+      position: relative;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+      text-align: center;
+    }
+    .modal-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: none;
+      border: none;
+      font-size: 1.25rem;
+      cursor: pointer;
+      color: var(--text-muted);
+    }
+    .platform-links {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      margin-top: 1.5rem;
+    }
+    .platform-btn {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.8rem 1.2rem;
+      border-radius: 8px;
+      color: white;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: transform 0.2s, opacity 0.2s;
+    }
+    .platform-btn:hover {
+      transform: translateY(-2px);
+      opacity: 0.9;
+    }
+    .btn-audiomack { background-color: #ffa200; color: #000; }
+    
+    /* BOOMPLAY CUSTOM BLACK & BLUE LOGO STYLING */
+    .btn-boomplay { 
+      background-color: #0b0e14; 
+      color: #00aded; 
+      border: 1.5px solid #00aded; 
+    }
+    .boomplay-b-logo {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      background-color: #00aded;
+      color: #0b0e14;
+      font-weight: 900;
+      font-family: Arial, sans-serif;
+      border-radius: 4px;
+      margin-right: 6px;
+      font-size: 0.85rem;
+    }
+
+    .btn-spotify { background-color: #1ed760; color: #fff; }
+    .btn-apple { background-color: #fc3c44; }
+    .btn-amazon { background-color: #232f3e; }
 
     /* FOOTER */
     footer { background: var(--bg-dark); color: #9ca3af; padding: 4rem 0 2rem; border-top: 1px solid rgba(255,255,255,0.05); }
@@ -309,7 +487,7 @@
           <div class="hero-tagline">WORSHIP. FAITH. INSPIRATION.</div>
           <p class="hero-desc">Spirit-filled songs that touch hearts, transform lives and glorify God.</p>
           <div style="display:flex; gap:1rem;">
-            <button class="btn btn-gold" onclick="switchPage('songs')"><i class="fa-solid fa-play"></i> LISTEN TO SONGS</button>
+            <button class="btn btn-gold" onclick="switchPage('songs')"><i class="fa-solid fa-play"></i> LISTEN TO SONG</button>
             <button class="btn btn-outline-gold" onclick="scrollToSection('about')"><i class="fa-solid fa-book"></i> ABOUT THE MINISTRY</button>
           </div>
         </div>
@@ -324,7 +502,6 @@
     <div class="container">
       <!-- FEATURED ALBUM SECTION -->
       <section class="album-card">
-        <!-- ALBUM ART COVER -->
         <div class="album-art-placeholder">
            <img src="iseoluwa.jpg" alt="Ise Oluwa Album Cover">
         </div>
@@ -332,11 +509,11 @@
           <span style="font-size:0.75rem; color:var(--gold-primary); font-weight:700; letter-spacing:1px;">LATEST ALBUM</span>
           <h2 style="font-family:Georgia, serif; font-size:2rem; margin: 0.2rem 0;">ISE OLUWA</h2>
           <p style="color:var(--text-muted); margin-bottom: 1.5rem;">An inspiring musical declaration celebrating the mighty works, power, and wonders of God in every season.</p>
-          <button class="btn btn-dark" onclick="switchPage('songs')"><i class="fa-solid fa-list-music"></i> CLICK TO VIEW TRACKS</button>
+          <button class="btn btn-dark" onclick="switchPage('songs')"><i class="fa-solid fa-compact-disc"></i> LISTEN TO ALBUM</button>
         </div>
       </section>
 
-      <!-- ABOUT SECTION WITH ROTATING IMAGE SLIDER (7 SECONDS) -->
+      <!-- ABOUT SECTION WITH ROTATING IMAGE SLIDER (3 SECONDS) -->
       <section id="about" style="padding: 5rem 0; display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:center;">
         <div class="about-slider">
           <img src="about1.jpg" alt="Ministry Corner Image 1" class="about-slide active">
@@ -351,35 +528,79 @@
         </div>
       </section>
 
-      <!-- FEATURED SONGS PREVIEW WITH DOWNLOAD BUTTONS -->
+      <!-- SONG PREVIEW SECTION -->
       <section class="songs-section">
-        <div class="section-title">FEATURED SONGS ♫</div>
+        <div class="section-title">SONG PREVIEW ♫</div>
         <div class="songs-grid">
           
-          <!-- SONG 1 -->
+          <!-- SONG 1 (CUSTOM 35S PREVIEW PLAYER) -->
           <div class="song-card">
-            <h4>Agbara orin iyin</h4>
-            <span style="font-size:0.8rem; color:var(--text-muted)">Duration: 4:12</span>
-            <div class="player-download-row">
-              <audio controls class="audio-player">
-                <source src="AGBARA ORIN IYIN.mp3" type="audio/mpeg">
-              </audio>
-              <button onclick="downloadAudio('AGBARA ORIN IYIN.mp3', 'Agbara Orin Iyin - El-Bethel.mp3')" class="btn-download" title="Download to Device">
-                <i class="fa-solid fa-download"></i>
+            <div>
+              <h4 style="font-size:1.1rem; font-weight:700;">Agbara orin iyin</h4>
+              
+              <div class="custom-player-wrapper" id="player-agbara">
+                <audio id="audio-agbara" src="AGBARA ORIN IYIN.mp3"></audio>
+                
+                <div class="player-controls-row">
+                  <button class="play-btn-custom" onclick="toggleCustomPlay('agbara')">
+                    <i class="fa-solid fa-play" id="icon-agbara"></i>
+                  </button>
+                  <div class="progress-bar-container" onclick="seekCustomAudio(event, 'agbara')">
+                    <div class="progress-bar-fill" id="progress-agbara"></div>
+                  </div>
+                  <div class="time-display" id="time-agbara">0:00 / 0:35</div>
+                </div>
+
+                <!-- END PREVIEW LOCK OVERLAY -->
+                <div class="preview-locked-overlay" id="overlay-agbara">
+                  <i class="fa-solid fa-lock"></i> PREVIEW ENDED
+                </div>
+              </div>
+            </div>
+
+            <div class="btn-hand-wrapper">
+              <button class="btn btn-gold" onclick="switchPage('songs')">
+                <span>Listen to full song <i class="fa-solid fa-arrow-right"></i></span>
+                <!-- POINTING HAND DIRECTLY INSIDE BUTTON BELOW BLACK TEXT -->
+                <div class="pointing-hand-container" id="hand-agbara">
+                  <i class="fa-solid fa-hand-pointer pointing-hand-icon"></i>
+                </div>
               </button>
             </div>
           </div>
 
-          <!-- SONG 2 -->
+          <!-- SONG 2 (CUSTOM 35S PREVIEW PLAYER) -->
           <div class="song-card">
-            <h4>Ise oluwa</h4>
-            <span style="font-size:0.8rem; color:var(--text-muted)">Duration: 3:34</span>
-            <div class="player-download-row">
-              <audio controls class="audio-player">
-                <source src="ISE OLUWA.mp3" type="audio/mpeg">
-              </audio>
-              <button onclick="downloadAudio('ISE OLUWA.mp3', 'Ise Oluwa - El-Bethel.mp3')" class="btn-download" title="Download to Device">
-                <i class="fa-solid fa-download"></i>
+            <div>
+              <h4 style="font-size:1.1rem; font-weight:700;">Ise oluwa</h4>
+              
+              <div class="custom-player-wrapper" id="player-ise">
+                <audio id="audio-ise" src="ISE OLUWA.mp3"></audio>
+                
+                <div class="player-controls-row">
+                  <button class="play-btn-custom" onclick="toggleCustomPlay('ise')">
+                    <i class="fa-solid fa-play" id="icon-ise"></i>
+                  </button>
+                  <div class="progress-bar-container" onclick="seekCustomAudio(event, 'ise')">
+                    <div class="progress-bar-fill" id="progress-ise"></div>
+                  </div>
+                  <div class="time-display" id="time-ise">0:00 / 0:35</div>
+                </div>
+
+                <!-- END PREVIEW LOCK OVERLAY -->
+                <div class="preview-locked-overlay" id="overlay-ise">
+                  <i class="fa-solid fa-lock"></i> PREVIEW ENDED
+                </div>
+              </div>
+            </div>
+
+            <div class="btn-hand-wrapper">
+              <button class="btn btn-gold" onclick="switchPage('songs')">
+                <span>Listen to full song <i class="fa-solid fa-arrow-right"></i></span>
+                <!-- POINTING HAND DIRECTLY INSIDE BUTTON BELOW BLACK TEXT -->
+                <div class="pointing-hand-container" id="hand-ise">
+                  <i class="fa-solid fa-hand-pointer pointing-hand-icon"></i>
+                </div>
               </button>
             </div>
           </div>
@@ -416,109 +637,123 @@
       <section id="gallery" style="margin-bottom:4rem;">
         <h3 style="margin-bottom:1.5rem;"><i class="fa-regular fa-image" style="color:var(--gold-primary)"></i> GALLERY PREVIEW</h3>
         
-        <!-- 2x2 SQUARE GALLERY GRID -->
         <div class="gallery-grid">
-          <div class="gallery-item">
-            <img src="Gallery1.jpg" alt="Gallery Image 1">
-          </div>
-          <div class="gallery-item">
-            <img src="Gallery2.jpg" alt="Gallery Image 2">
-          </div>
-          <div class="gallery-item">
-            <img src="Gallery3.jpg" alt="Gallery Image 3">
-          </div>
-          <div class="gallery-item">
-            <img src="gallery4.jpg" alt="Gallery Image 4">
-          </div>
+          <div class="gallery-item"><img src="Gallery1.jpg" alt="Gallery Image 1"></div>
+          <div class="gallery-item"><img src="Gallery2.jpg" alt="Gallery Image 2"></div>
+          <div class="gallery-item"><img src="Gallery3.jpg" alt="Gallery Image 3"></div>
+          <div class="gallery-item"><img src="gallery4.jpg" alt="Gallery Image 4"></div>
         </div>
       </section>
     </div>
   </main>
 
-  <!-- PAGE 2: ALL SONGS PAGE WITH DOWNLOAD BUTTONS -->
+  <!-- PAGE 2: ALL SONGS PAGE -->
   <main id="songs-page" class="page-view">
     <div class="container" style="padding-top: 3rem; padding-bottom: 5rem;">
       <div style="text-align:center; margin-bottom: 3rem;">
         <span style="color:var(--gold-primary); font-weight:700; letter-spacing:2px;">MUSIC COLLECTION</span>
         <h1 style="font-family:Georgia, serif; font-size:2.8rem; margin-top:0.5rem;">All Songs & Discography</h1>
-        <p style="color:var(--text-muted);">Listen to and download all worship and praise tracks directly to your phone or computer.</p>
+        <p style="color:var(--text-muted);">Choose your preferred streaming platform to listen to the full tracks.</p>
       </div>
 
       <div class="songs-grid">
         
         <!-- SONG 1 -->
         <div class="song-card">
-          <h3>1. Agbara orin iyin</h3>
-          <span style="font-size:0.85rem; color:var(--text-muted);">Duration: 4:12</span>
-          <div class="player-download-row">
-            <audio controls class="audio-player">
-              <source src="AGBARA ORIN IYIN.mp3" type="audio/mpeg">
-            </audio>
-            <button onclick="downloadAudio('AGBARA ORIN IYIN.mp3', 'Agbara Orin Iyin - El-Bethel.mp3')" class="btn-download" title="Download to Device">
-              <i class="fa-solid fa-download"></i>
-            </button>
+          <div>
+            <h3>1. Agbara orin iyin</h3>
+            <span style="font-size:0.85rem; color:var(--text-muted);">Spirit-filled praise</span>
           </div>
+          <button class="btn btn-gold" onclick="openStreamModal('agbara')" style="margin-top: 1.5rem; justify-content: center;">
+            <i class="fa-solid fa-play"></i> Stream Song
+          </button>
         </div>
 
         <!-- SONG 2 -->
         <div class="song-card">
-          <h3>2. Ise oluwa</h3>
-          <span style="font-size:0.85rem; color:var(--text-muted);">Duration: 3:34</span>
-          <div class="player-download-row">
-            <audio controls class="audio-player">
-              <source src="ISE OLUWA.mp3" type="audio/mpeg">
-            </audio>
-            <button onclick="downloadAudio('ISE OLUWA.mp3', 'Ise Oluwa - El-Bethel.mp3')" class="btn-download" title="Download to Device">
-              <i class="fa-solid fa-download"></i>
-            </button>
+          <div>
+            <h3>2. Ise oluwa</h3>
+            <span style="font-size:0.85rem; color:var(--text-muted);">Worship & thanksgiving</span>
           </div>
+          <button class="btn btn-gold" onclick="openStreamModal('ise')" style="margin-top: 1.5rem; justify-content: center;">
+            <i class="fa-solid fa-play"></i> Stream Song
+          </button>
         </div>
 
         <!-- SONG 3 -->
         <div class="song-card">
-          <h3>3. Okun ri o sa</h3>
-          <span style="font-size:0.85rem; color:var(--text-muted);">Duration: 5:32</span>
-          <div class="player-download-row">
-            <audio controls class="audio-player">
-              <source src="OKUN RI O SA.mp3" type="audio/mpeg">
-            </audio>
-            <button onclick="downloadAudio('OKUN RI O SA.mp3', 'Okun Ri O Sa - El-Bethel.mp3')" class="btn-download" title="Download to Device">
-              <i class="fa-solid fa-download"></i>
-            </button>
+          <div>
+            <h3>3. Okun ri o sa</h3>
+            <span style="font-size:0.85rem; color:var(--text-muted);">Divine power & victory</span>
           </div>
+          <button class="btn btn-gold" onclick="openStreamModal('okun')" style="margin-top: 1.5rem; justify-content: center;">
+            <i class="fa-solid fa-play"></i> Stream Song
+          </button>
         </div>
 
         <!-- SONG 4 -->
         <div class="song-card">
-          <h3>4. Olugbala ti de</h3>
-          <span style="font-size:0.85rem; color:var(--text-muted);">Duration: 4:54</span>
-          <div class="player-download-row">
-            <audio controls class="audio-player">
-              <source src="OLUGBALA TIDE.mp3" type="audio/mpeg">
-            </audio>
-            <button onclick="downloadAudio('OLUGBALA TIDE.mp3', 'Olugbala Ti De - El-Bethel.mp3')" class="btn-download" title="Download to Device">
-              <i class="fa-solid fa-download"></i>
-            </button>
+          <div>
+            <h3>4. Olugbala ti de</h3>
+            <span style="font-size:0.85rem; color:var(--text-muted);">Declaration of Salvation</span>
           </div>
+          <button class="btn btn-gold" onclick="openStreamModal('olugbala')" style="margin-top: 1.5rem; justify-content: center;">
+            <i class="fa-solid fa-play"></i> Stream Song
+          </button>
         </div>
 
         <!-- SONG 5 -->
         <div class="song-card">
-          <h3>5. Ibukun ni</h3>
-          <span style="font-size:0.85rem; color:var(--text-muted);">Duration: 5:07</span>
-          <div class="player-download-row">
-            <audio controls class="audio-player">
-              <source src="IBUKUN NI.mp3" type="audio/mpeg">
-            </audio>
-            <button onclick="downloadAudio('IBUKUN NI.mp3', 'Ibukun Ni - El-Bethel.mp3')" class="btn-download" title="Download to Device">
-              <i class="fa-solid fa-download"></i>
-            </button>
+          <div>
+            <h3>5. Ibukun ni</h3>
+            <span style="font-size:0.85rem; color:var(--text-muted);">Song of Blessings</span>
           </div>
+          <button class="btn btn-gold" onclick="openStreamModal('ibukun')" style="margin-top: 1.5rem; justify-content: center;">
+            <i class="fa-solid fa-play"></i> Stream Song
+          </button>
         </div>
 
       </div>
     </div>
   </main>
+
+  <!-- STREAMING CHOICE MODAL POPUP -->
+  <div class="modal-overlay" id="streamModal">
+    <div class="modal-card">
+      <button class="modal-close" onclick="closeStreamModal()"><i class="fa-solid fa-xmark"></i></button>
+      
+      <h3 style="font-family: Georgia, serif; font-size: 1.5rem; margin-bottom: 0.2rem;" id="modalSongTitle">Song Title</h3>
+      <p style="color: var(--text-muted); font-size: 0.85rem;">Select your preferred platform to listen to full song:</p>
+      
+      <div class="platform-links">
+        <a id="linkAudiomack" href="#" target="_blank" class="platform-btn btn-audiomack">
+          <span><i class="fa-solid fa-play"></i> Audiomack</span>
+          <i class="fa-solid fa-arrow-up-right-from-square"></i>
+        </a>
+
+        <!-- BOOMPLAY BUTTON WITH CUSTOM LOGO STYLING -->
+        <a id="linkBoomplay" href="#" target="_blank" class="platform-btn btn-boomplay">
+          <span><span class="boomplay-b-logo">B</span> Boomplay</span>
+          <i class="fa-solid fa-arrow-up-right-from-square"></i>
+        </a>
+
+        <a id="linkSpotify" href="#" target="_blank" class="platform-btn btn-spotify">
+          <span><i class="fa-brands fa-spotify"></i> Spotify</span>
+          <i class="fa-solid fa-arrow-up-right-from-square"></i>
+        </a>
+
+        <a id="linkApple" href="#" target="_blank" class="platform-btn btn-apple">
+          <span><i class="fa-brands fa-apple"></i> Apple Music</span>
+          <i class="fa-solid fa-arrow-up-right-from-square"></i>
+        </a>
+
+        <a id="linkAmazon" href="#" target="_blank" class="platform-btn btn-amazon">
+          <span><i class="fa-brands fa-amazon"></i> Amazon Music</span>
+          <i class="fa-solid fa-arrow-up-right-from-square"></i>
+        </a>
+      </div>
+    </div>
+  </div>
 
   <!-- FOOTER & CONTACT -->
   <footer id="contact">
@@ -572,8 +807,90 @@
 
   <!-- ROUTING AND INTERACTION JAVASCRIPT -->
   <script>
-    // Page navigation switcher
-    function switchPage(pageId) {
+    // SONGS DATABASE WITH STREAMING LINKS
+    const songData = {
+      agbara: {
+        title: "Agbara Orin Iyin",
+        audiomack: "https://audiomack.com/evang-dr-ayebidun-omotola/song/agbara-orin-iyin?share-user-id=159896501",
+        boomplay: "https://www.boomplay.com/share/music/245727117",
+        spotify: "https://open.spotify.com/track/5ugFOUV8QUBrLxuTnAef6a",
+        apple: "https://music.apple.com/us/song/agbara-orin-iyin/1892347769",
+        amazon: "https://music.amazon.com/tracks/B0GWR41R6M?marketplaceId=ATVPDKIKX0DER&musicTerritory=US&ref=dm_sh_kxBdUOyCqrRJOAP8JpnJQ1omw"
+      },
+      ise: {
+        title: "Ise Oluwa",
+        audiomack: "https://audiomack.com/evang-dr-ayebidun-omotola/song/ise-oluwa-1?share-user-id=159896501",
+        boomplay: "https://www.boomplay.com/share/music/245722413",
+        spotify: "https://open.spotify.com/track/43fNwZvwMvKExIB86zwjSo",
+        apple: "https://music.apple.com/us/song/ise-oluwa/1892347779",
+        amazon: "https://music.amazon.com/tracks/B0GWR7MR32?marketplaceId=ATVPDKIKX0DER&musicTerritory=US&ref=dm_sh_Qp0H1OBv3RCiHP0NXlL3Q7rPK"
+      },
+      okun: {
+        title: "Okun Ri O Sa",
+        audiomack: "https://audiomack.com/evang-dr-ayebidun-omotola/song/okun-ri-o-sa?share-user-id=159896501",
+        boomplay: "https://www.boomplay.com/share/music/245727116",
+        spotify: "https://open.spotify.com/track/0wGswnZbvQVaujHN46m4GK",
+        apple: "https://music.apple.com/us/song/okun-ri-o-sa/1892347932",
+        amazon: "https://music.amazon.com/tracks/B0GWR6JXZD?marketplaceId=ATVPDKIKX0DER&musicTerritory=US&ref=dm_sh_uA93PHvxqdMYxmdqDVoB63qQQ"
+      },
+      olugbala: {
+        title: "Olugbala Ti De",
+        audiomack: "https://audiomack.com/evang-dr-ayebidun-omotola/song/olugbala-tide?share-user-id=159896501",
+        boomplay: "https://www.boomplay.com/share/music/245722414",
+        spotify: "https://open.spotify.com/track/6cFHjzyM6InJPB02KfLzlN",
+        apple: "https://music.apple.com/us/song/olugbala-tide/1892347937",
+        amazon: "https://music.amazon.com/tracks/B0GWR7VRXT?marketplaceId=ATVPDKIKX0DER&musicTerritory=US&ref=dm_sh_hmcSfOpCCWCxl6T7EfgsYoGsU"
+      },
+      ibukun: {
+        title: "Ibukun Ni",
+        audiomack: "https://audiomack.com/evang-dr-ayebidun-omotola/song/ibukun-ni?share-user-id=159896501",
+        boomplay: "https://www.boomplay.com/share/music/245722415",
+        spotify: "https://open.spotify.com/track/6I2qdlA23LYwLOS6duZTKx",
+        apple: "https://music.apple.com/us/song/ibukun-ni/1892347949",
+        amazon: "https://music.amazon.com/tracks/B0GWR85KXD?marketplaceId=ATVPDKIKX0DER&musicTerritory=US&ref=dm_sh_eJjzt66lpJTSSQfzZhU5CJFmC"
+      }
+    };
+
+    // Initialize History state for root page
+    if (!history.state) {
+      history.replaceState({ view: 'home', section: 'top' }, '', window.location.pathname);
+    }
+
+    // Modal Control Logic
+    function openStreamModal(songKey) {
+      const song = songData[songKey];
+      if (!song) return;
+
+      document.getElementById('modalSongTitle').innerText = song.title;
+      document.getElementById('linkAudiomack').href = song.audiomack;
+      document.getElementById('linkBoomplay').href = song.boomplay;
+      document.getElementById('linkSpotify').href = song.spotify;
+      document.getElementById('linkApple').href = song.apple;
+      document.getElementById('linkAmazon').href = song.amazon;
+
+      document.getElementById('streamModal').classList.add('active');
+      history.pushState({ modalOpen: true }, '');
+    }
+
+    function closeStreamModal(isPopState = false) {
+      const modal = document.getElementById('streamModal');
+      if (modal.classList.contains('active')) {
+        modal.classList.remove('active');
+        if (!isPopState && history.state && history.state.modalOpen) {
+          history.back();
+        }
+      }
+    }
+
+    // Close modal on background overlay click
+    document.getElementById('streamModal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeStreamModal();
+      }
+    });
+
+    // Page navigation switcher with History Push State
+    function switchPage(pageId, pushToHistory = true) {
       document.querySelectorAll('.page-view').forEach(page => page.classList.remove('active'));
       document.querySelectorAll('.nav-links a').forEach(link => link.classList.remove('active'));
 
@@ -581,23 +898,51 @@
         document.getElementById('songs-page').classList.add('active');
         document.getElementById('nav-songs').classList.add('active');
         window.scrollTo({ top: 0, behavior: 'smooth' });
+        if (pushToHistory) history.pushState({ view: 'songs' }, '');
       } else {
         document.getElementById('home-page').classList.add('active');
-        document.getElementById('nav-home').classList.active;
+        document.getElementById('nav-home').classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        if (pushToHistory) history.pushState({ view: 'home', section: 'top' }, '');
       }
     }
 
-    // Smooth section scrolling on Home Page
-    function scrollToSection(sectionId) {
+    // Smooth section scrolling on Home Page with History Push State
+    function scrollToSection(sectionId, pushToHistory = true) {
       if(!document.getElementById('home-page').classList.contains('active')) {
-        switchPage('home');
+        switchPage('home', false);
         setTimeout(() => {
           document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
         }, 100);
       } else {
         document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
       }
+      if (pushToHistory) {
+        history.pushState({ view: 'home', section: sectionId }, '');
+      }
     }
+
+    // Handle Mobile Back Button (popstate event)
+    window.addEventListener('popstate', function(e) {
+      if (document.getElementById('streamModal').classList.contains('active')) {
+        closeStreamModal(true);
+        return;
+      }
+
+      const state = e.state;
+      if (state) {
+        if (state.view === 'songs') {
+          switchPage('songs', false);
+        } else if (state.view === 'home') {
+          switchPage('home', false);
+          if (state.section && state.section !== 'top') {
+            document.getElementById(state.section)?.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+      } else {
+        switchPage('home', false);
+      }
+    });
 
     // Mobile Hamburger Menu Toggle
     function toggleMenu() {
@@ -618,37 +963,71 @@
 
     setInterval(showNextSlide, 3000);
 
-    // DIRECT DEVICE DOWNLOAD TRIGGER (Forces browser file save)
-    function downloadAudio(fileUrl, fileName) {
-      fetch(fileUrl)
-        .then(response => {
-          if(!response.ok) throw new Error("File fetch failed");
-          return response.blob();
-        })
-        .then(blob => {
-          const blobUrl = window.URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.style.display = 'none';
-          a.href = blobUrl;
-          a.download = fileName;
-          document.body.appendChild(a);
-          a.click();
-          window.URL.revokeObjectURL(blobUrl);
-          document.body.removeChild(a);
-        })
-        .catch(() => {
-          // Fallback if cross-origin or local security blocks fetch
-          const a = document.createElement('a');
-          a.href = fileUrl;
-          a.download = fileName;
-          a.target = '_blank';
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-        });
+    // CUSTOM 35-SECOND AUDIO PLAYER LOGIC
+    const activeKeys = ['agbara', 'ise'];
+
+    function toggleCustomPlay(key) {
+      const audio = document.getElementById(`audio-${key}`);
+      const icon = document.getElementById(`icon-${key}`);
+
+      // Auto-pause other audio tracks
+      activeKeys.forEach(k => {
+        if (k !== key) {
+          const otherAudio = document.getElementById(`audio-${k}`);
+          const otherIcon = document.getElementById(`icon-${k}`);
+          if (otherAudio && !otherAudio.paused) {
+            otherAudio.pause();
+            otherIcon.className = 'fa-solid fa-play';
+          }
+        }
+      });
+
+      if (audio.paused) {
+        audio.play();
+        icon.className = 'fa-solid fa-pause';
+      } else {
+        audio.pause();
+        icon.className = 'fa-solid fa-play';
+      }
     }
+
+    function seekCustomAudio(e, key) {
+      const audio = document.getElementById(`audio-${key}`);
+      const progressBar = e.currentTarget;
+      const clickPosition = (e.clientX - progressBar.getBoundingClientRect().left) / progressBar.offsetWidth;
+      const newTime = clickPosition * 35;
+      audio.currentTime = newTime;
+    }
+
+    // Attach listeners for 35-second limit, progress bar fill, and lock overlay
+    activeKeys.forEach(key => {
+      const audio = document.getElementById(`audio-${key}`);
+      const icon = document.getElementById(`icon-${key}`);
+      const progress = document.getElementById(`progress-${key}`);
+      const timeDisplay = document.getElementById(`time-${key}`);
+      const overlay = document.getElementById(`overlay-${key}`);
+      const hand = document.getElementById(`hand-${key}`);
+
+      audio.addEventListener('timeupdate', function() {
+        const curTime = Math.min(this.currentTime, 35);
+        const percent = (curTime / 35) * 100;
+        progress.style.width = `${percent}%`;
+
+        const secs = Math.floor(curTime);
+        const formattedSecs = secs < 10 ? `0${secs}` : secs;
+        timeDisplay.innerText = `0:${formattedSecs} / 0:35`;
+
+        // At 35 seconds: stop audio, trigger lock overlay & show animated hand inside button
+        if (this.currentTime >= 35) {
+          this.pause();
+          this.currentTime = 35;
+          icon.className = 'fa-solid fa-play';
+          overlay.classList.add('active');
+          hand.classList.add('active');
+        }
+      });
+    });
   </script>
 
 </body>
 </html>
-
